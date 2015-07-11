@@ -1,1 +1,0 @@
-/Users/Nobutaka/Documents/workspace/http-client/src/client/Client.java
