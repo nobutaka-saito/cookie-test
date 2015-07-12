@@ -1,6 +1,8 @@
 package servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -38,6 +40,7 @@ public class TestServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		out.println("Welcome!");
+		out.print("Your reqeust: " + read(request));
 		if (session == null) {
 			out.println("new session");
 			session = request.getSession(true);
@@ -49,5 +52,16 @@ public class TestServlet extends HttpServlet {
 			session.setAttribute(ACCESS_COUNT_ATTR_KEY, count + 1);
 			out.println("access count: " + (count + 1));
 		}
+	}
+	
+	private static String read(HttpServletRequest request) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		StringBuffer content = new StringBuffer();
+		String line = reader.readLine();
+		while (line != null) {
+			content.append(line);
+			line = reader.readLine();
+		}
+		return content.toString();
 	}
 }

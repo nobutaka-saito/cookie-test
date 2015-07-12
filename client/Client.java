@@ -10,10 +10,13 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
+import com.google.gson.Gson;
 
 public class Client {
 	public static final String URL = "http://localhost:8080/servlet-test/TestServlet";
@@ -31,10 +34,11 @@ public class Client {
 	
 	public void post() throws IOException, URISyntaxException {        
         CloseableHttpClient httpclient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+        
+        String gsonLoginInfo = new Gson().toJson(new LoginInfo("user", "pass"), LoginInfo.class);
         HttpUriRequest request = RequestBuilder.post()
                 .setUri(new URI(URL))
-                .addParameter("id", "user")
-                .addParameter("password", "pass")
+                .setEntity(new StringEntity(gsonLoginInfo))
                 .build();
         CloseableHttpResponse response = httpclient.execute(request);
         try {
